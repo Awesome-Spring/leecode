@@ -1,68 +1,52 @@
-package com.my.sloution._001;
+package com.my.sloution._003;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 /**
- * 给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。
- * 示例 1：
- * 输入：nums = [2,7,11,15], target = 9
- * 输出：[0,1]
- * 解释：因为 nums[0] + nums[1] == 9 ，返回 [0, 1] 。
- * <p>
- * 示例 2：
- * 输入：nums = [3,2,4], target = 6
- * 输出：[1,2]
- * <p>
- * 示例 3：
- * 输入：nums = [3,3], target = 6
- * 输出：[0,1]
- * <p>
- * 来源：力扣（LeetCode）
- * 链接：https://leetcode-cn.com/problems/two-sum
- * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+ * 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+ *
+ * 示例 1:
+ *
+ * 输入: s = "abcabcbb"
+ * 输出: 3
+ * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+ * 示例 2:
+ *
+ * 输入: s = "bbbbb"
+ * 输出: 1
+ * 解释: 因为无重复字符的最长子串是 "b"，所以其长度为 1。
+ * 示例 3:
+ *
+ * 输入: s = "pwwkew"
+ * 输出: 3
+ * 解释: 因为无重复字符的最长子串是 "wke"，所以其长度为 3。
+ *      请注意，你的答案必须是 子串 的长度，"pwke" 是一个子序列，不是子串。
+ * 提示：
+ *
+ * 0 <= s.length <= 5 * 104
+ * s 由英文字母、数字、符号和空格组成
+ * Related Topics
+ * 哈希表
+ * 字符串
+ * 滑动窗口
+ *
  */
 class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        int[] indexes = new int[2];
-        ////元素值和元素位置的映射
-        Map<Integer,Integer> map = new HashMap<>(16);
-        //遍历数组 把数组索引作为key,值为value 存入 map,
-        for (int i = 0; i < nums.length ; i++) {
-           int one = nums[i];
-           int matchedNum = target-one;
-           //map中命中
-           if (map.containsKey(matchedNum) ){
-               //拿到索引
-               indexes[0] = map.get(matchedNum);
-               indexes[1] = i;
-               return indexes;
-           }else {
-               map.put(nums[i],i);
-           }
+    public static int lengthOfLongestSubstring(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
         }
-        return indexes;
-        //暴力法
-//        for (int i = 0; i < nums.length; i++) {
-//            int one = nums[i];
-//            for (int j = nums.length-1; j > i; j--) {
-//                if (nums[j] == target - one) {
-//                    indexes[0] = i;
-//                    indexes[1] = j;
-//                    return indexes;
-//                }
-//
-//            }
-//        }
-//        return indexes;
-
+        LinkedList<Character> slidingWindow = new LinkedList<>();
+        for (Character character : s.toCharArray()) {
+            slidingWindow.add(character);
+            if (slidingWindow.stream().distinct().count() != slidingWindow.size()) {
+                slidingWindow.removeFirst();
+            }
+        }
+        return slidingWindow.size();
     }
 
     public static void main(String[] args) {
-        int[] nums= new int[]{2,11,7,15};
-        int target= 9;
-        Solution instance = new Solution();
-        System.out.println(Arrays.toString(instance.twoSum(nums, target)));
+        System.out.println(lengthOfLongestSubstring("pwwkew"));
     }
 }
